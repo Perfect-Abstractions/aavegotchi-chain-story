@@ -5,13 +5,53 @@ import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
+import { useScaffoldContract, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
 
+  const { data: AavegotchiChainStory } = useScaffoldContract({ contractName: "AavegotchiChainStory" });
+
+  const { writeContractAsync: writeAaavegotchiChainStoryAsync } = useScaffoldWriteContract("AavegotchiChainStory");
+
+  const { data: glitterMinimum, refetch: refetchGetGlitterMinimum } = useScaffoldReadContract({
+    contractName: "AavegotchiChainStory",
+  });
+
   return (
     <>
       <div className="flex items-center flex-col flex-grow pt-10">
+        <div className="flex flex-col m-10">
+          <p className="text-xl">AavegotchiChainStory Address: {AavegotchiChainStory?.address || "N/A"}</p>
+
+          <button
+            className="btn btn-primary"
+            onClick={async () => {
+              await writeAaavegotchiChainStoryAsync({
+                functionName: "submitStoryPart",
+                args: ["Author Name", "Author Contact", "Author Note", "Story Part...", BigInt(100000)],
+              });
+
+              await refetchGetGlitterMinimum();
+            }}
+          >
+            Submit Story Part
+          </button>
+
+          <button
+            className="btn btn-primary"
+            onClick={async () => {
+              await writeAaavegotchiChainStoryAsync({
+                functionName: "setGltrMinimum",
+                args: [BigInt(100000)],
+              });
+            }}
+          >
+            Set Glitter Minimum
+          </button>
+          <p className="text-xl">Glitter Minimum: {glitterMinimum?.toString() || "N/A"}</p>
+        </div>
+
         <div className="px-5">
           <h1 className="text-center">
             <span className="block text-2xl mb-2">Welcome to</span>
