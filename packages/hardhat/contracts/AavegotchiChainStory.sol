@@ -37,10 +37,16 @@ contract AavegotchiChainStory {
         mapping(uint256 round => bool) roundsVoted;
     }
 
+    struct RoundsNoVoteWon {
+        uint16 round;
+        uint104 voteScore;
+    }
+
     struct AppStorage {
         address admin;
         StoryPart[] storyParts;
         mapping(uint256 round => uint24[] submissions) roundSubmissions;
+        RoundsNoVoteWon[] roundsNoVoteWon; // must have had submissions
         uint24[] publishedStoryParts;
         mapping(address author => Author) authors;
         uint16 totalAuthorsVoted;
@@ -70,6 +76,7 @@ contract AavegotchiChainStory {
 
     event StoryPartSubmission(uint256 indexed _round, uint256 indexed _storyPartId, address indexed _authorAddress);
     event StoryPartPublished(uint256 indexed _round, uint256 indexed _storyPartId, address indexed _authorAddress);
+    event NoVoteRound(uint256 indexed _round, uint256 _voteScore);
     event SubmissionVote(address indexed _voter, uint256 indexed _round, uint256 indexed _storyPartId);
 
     constructor(
@@ -216,7 +223,7 @@ contract AavegotchiChainStory {
         else {
             uint256 submissionStartTime;
             (round, submissionStartTime) = getRoundSubmissionData();
-            if(canSubmitStoryPartAfterFourteenDays()) {
+            if(canSubmitStoryPartAfterFourteenDays()) {                
                 if(s.newSubmissionInRound) {
                     s.totalAuthorsVoted = 0;
                     uint256 winningStoryPartId = s.winningSubmissionStoryPartId;
@@ -227,7 +234,13 @@ contract AavegotchiChainStory {
                         Author storage winningAuthor = s.authors[winningStoryPart.authorAddress];
                         winningAuthor.published = true;
                         winningAuthor.publishedStoryPartId = uint24(winningStoryPartId);
+                        winningAuthor.disregardedVotingPower = s.sharedVotingPower;
                         emit StoryPartPublished(s.round, winningStoryPartId, winningStoryPart.authorAddress);
+                        uint256 numPublishedAuthors = s.publishedStoryParts.length;
+                        s.sharedVotingPower += uint104(winningStoryPart.gltrAmount / numPublishedAuthors);
+                    } else {
+                        s.roundsNoVoteWon.push(RoundsNoVoteWon({round: s.round, voteScore: s.noSubmissionVoteScore}));
+                        emit NoVoteRound(s.round, s.noSubmissionVoteScore);
                     }                    
                     s.noSubmissionVoteScore = 0;
                     s.winningSubmissionStoryPartId = type(uint24).max;
@@ -312,10 +325,10 @@ contract AavegotchiChainStory {
             s.noSubmissionVoteScore += uint104(votingPower);
         }
         emit SubmissionVote(msg.sender, round, _storyPartId);
-        uint256 totalPublishedAuthors = s.publishedStoryParts.length;
+        uint256 numPublishedAuthors = s.publishedStoryParts.length;
         totalAuthorsVoted++;
         s.totalAuthorsVoted = uint16(totalAuthorsVoted);
-        if(totalPublishedAuthors == totalAuthorsVoted) {            
+        if(numPublishedAuthors == totalAuthorsVoted) {            
             s.submissionStartTime = uint40(block.timestamp);
             s.totalAuthorsVoted = 0; 
             s.newSubmissionInRound = false;
@@ -327,12 +340,48 @@ contract AavegotchiChainStory {
                 Author storage winningAuthor = s.authors[winningStoryPart.authorAddress];
                 winningAuthor.published = true;
                 winningAuthor.publishedStoryPartId = uint24(winningStoryPartId);
-                emit StoryPartPublished(s.round, winningStoryPartId, winningStoryPart.authorAddress);
+                winningAuthor.disregardedVotingPower = s.sharedVotingPower;
+                emit StoryPartPublished(s.round, winningStoryPartId, winningStoryPart.authorAddress);                
+                s.sharedVotingPower += uint104(winningStoryPart.gltrAmount / (numPublishedAuthors + 1));
+            }
+            else {
+                s.roundsNoVoteWon.push(RoundsNoVoteWon({round: s.round, voteScore: s.noSubmissionVoteScore}));
+                emit NoVoteRound(s.round, s.noSubmissionVoteScore);
             }
             s.round++;
             s.noSubmissionVoteScore = 0;
             s.winningSubmissionStoryPartId = type(uint24).max;
         }
+    }
+
+    function updateRound() external {
+        if(canSubmitStoryPartAfterFourteenDays() && s.newSubmissionInRound) {            
+            (uint256 round, uint256 submissionStartTime) = getRoundSubmissionData();
+            uint104 noSubmissionVoteScore = s.noSubmissionVoteScore;
+            s.totalAuthorsVoted = 0;
+            uint256 winningStoryPartId = s.winningSubmissionStoryPartId;
+            StoryPart storage winningStoryPart = s.storyParts[winningStoryPartId];
+            // If there were no voes this is false
+            if(winningStoryPart.voteScore > noSubmissionVoteScore) { 
+                winningStoryPart.published = true;
+                s.publishedStoryParts.push(uint24(winningStoryPartId));
+                Author storage winningAuthor = s.authors[winningStoryPart.authorAddress];
+                winningAuthor.published = true;
+                winningAuthor.publishedStoryPartId = uint24(winningStoryPartId);
+                winningAuthor.disregardedVotingPower = s.sharedVotingPower;
+                emit StoryPartPublished(s.round, winningStoryPartId, winningStoryPart.authorAddress);
+                uint256 numPublishedAuthors = s.publishedStoryParts.length;
+                s.sharedVotingPower += uint104(winningStoryPart.gltrAmount / numPublishedAuthors);
+            } else {
+                s.roundsNoVoteWon.push(RoundsNoVoteWon({round: s.round, voteScore: noSubmissionVoteScore}));
+                emit NoVoteRound(s.round, noSubmissionVoteScore);
+            }               
+            s.noSubmissionVoteScore = 0;
+            s.winningSubmissionStoryPartId = type(uint24).max;
+            s.round = uint16(round);
+            s.submissionStartTime = uint40(submissionStartTime);
+            s.newSubmissionInRound = false;
+        }            
     }
     
 
@@ -347,21 +396,44 @@ contract AavegotchiChainStory {
 
     }
 
-    function getRoundSubmissions(uint256 _round) external view returns(StoryPart[] memory storyParts_) {        
+    function internalGetRoundSubmissions(uint256 _round) internal view returns(StoryPart[] memory storyParts_) {
         uint24[] memory submissions = s.roundSubmissions[_round];
-        storyParts_ = new StoryPart[](submissions.length);
-        for(uint256 i; i < submissions.length; i++) {
-            storyParts_[i] = s.storyParts[submissions[i]];
-        }        
+        uint256 storyPartLength = submissions.length;
+        bool reportWinningStoryPart = false;
+        uint256 winningStoryPartId;
+        if(canSubmitStoryPartAfterFourteenDays() && _round == s.round && s.newSubmissionInRound) {
+            winningStoryPartId = s.winningSubmissionStoryPartId;
+            StoryPart storage winningStoryPart = s.storyParts[winningStoryPartId];
+             // If there were no voes this is false
+            if(winningStoryPart.voteScore > s.noSubmissionVoteScore) { 
+                reportWinningStoryPart = true;
+            }
+        }
+        if(reportWinningStoryPart) {
+            for(uint256 i; i < storyPartLength; i++) {
+                storyParts_[i] = s.storyParts[submissions[i]];
+                if(storyParts_[i].storyPartId == winningStoryPartId) {
+                    storyParts_[i].published = true;
+                }
+            }
+        }
+        else {
+            for(uint256 i; i < storyPartLength; i++) {
+                storyParts_[i] = s.storyParts[submissions[i]];             
+            }
+        }                        
+    }
+
+    function getRoundSubmissions(uint256 _round) external view returns(StoryPart[] memory storyParts_) {
+        storyParts_ = internalGetRoundSubmissions(_round);
     }
 
     function getLastSubmissions() external view returns(StoryPart[] memory storyParts_) {
-        uint256 round = getCurrentRound();
-        uint24[] memory submissions = s.roundSubmissions[round];
-        storyParts_ = new StoryPart[](submissions.length);
-        for(uint256 i; i < submissions.length; i++) {
-            storyParts_[i] = s.storyParts[submissions[i]];
+        uint256 round = s.round;
+        if(s.roundSubmissions[round].length == 0) {
+            round--;
         }        
+        storyParts_ = internalGetRoundSubmissions(round);        
     }
 
 
