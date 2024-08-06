@@ -3,6 +3,8 @@
 import { FormEvent } from "react";
 // import Link from "next/link";
 import type { NextPage } from "next";
+// import { SubmissionCard } from "~~/components/aavegotchi-chain-story/SubmissionCard";
+import { SubmissionListCardCard } from "~~/components/aavegotchi-chain-story/SubmissionListCard";
 // import { useAccount } from "wagmi";
 // import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 // import { Address } from "~~/components/scaffold-eth";
@@ -68,65 +70,15 @@ const Home: NextPage = () => {
     );
   });
 
-  const roundSubmissionsElements = roundSubmissions?.map((roundSubmission, index) => {
-    return (
-      <div key={"round-submission-" + index} className="flex flex-col">
-        <p className="text-xl">Round Submission {index.toString()}</p>
-        <p className="text-lg">Author Address</p>
-        <p className="text-sm">{roundSubmission.authorAddress}</p>
-        <p className="text-lg">Author Name</p>
-        <p className="text-sm">{roundSubmission.authorName}</p>
-        <p className="text-lg">Author Contact</p>
-        <p className="text-sm">{roundSubmission.authorContact}</p>
-        <p className="text-lg">Note</p>
-        <p className="text-sm">{roundSubmission.note}</p>
-        <p className="text-lg">Story Part</p>
-        <p className="text-sm">{roundSubmission.storyPart}</p>
-        <p className="text-lg">Gltr Amount</p>
-        <p className="text-sm">{roundSubmission.gltrAmount.toString()}</p>
-        <p className="text-lg">Vote Score</p>
-        <p className="text-sm">{roundSubmission.voteScore.toString()}</p>
-        <p className="text-lg">Story Part Id</p>
-        <p className="text-sm">{roundSubmission.storyPartId.toString()}</p>
-        <p className="text-lg">Round</p>
-        <p className="text-sm">{roundSubmission.round.toString()}</p>
-        <p className="text-lg">Published</p>
-        <p className="text-sm">{roundSubmission.published.toString()}</p>
-      </div>
-    );
-  });
+  // const roundSubmissionsElements = roundSubmissions?.map((roundSubmission, index) => {
+  //   return (
+  //     <SubmissionCard key={"round-submission-" + index} submission={roundSubmission} cardName="Round Submission" />
+  //   );
+  // });
 
-  const lastSubmissionsElements = lastSubmissions?.map((lastSubmission, index) => {
-    return (
-      <div key={"last-submission-" + index} className="flex flex-col">
-        <p className="text-xl">Last Submission {index.toString()}</p>
-        <p className="text-lg">Author Address</p>
-        <p className="text-sm">{lastSubmission.authorAddress}</p>
-        <p className="text-lg">Author Name</p>
-        <p className="text-sm">{lastSubmission.authorName}</p>
-        <p className="text-lg">Author Contact</p>
-        <p className="text-sm">{lastSubmission.authorContact}</p>
-        <p className="text-lg">Note</p>
-        <p className="text-sm">{lastSubmission.note}</p>
-        <p className="text-lg">Story Part</p>
-        <p className="text-sm">{lastSubmission.storyPart}</p>
-        <p className="text-lg">Gltr Amount</p>
-        <p className="text-sm">{lastSubmission.gltrAmount.toString()}</p>
-        <p className="text-lg">Vote Score</p>
-        <p className="text-sm">{lastSubmission.voteScore.toString()}</p>
-        <p className="text-lg">Story Part Id</p>
-        <p className="text-sm">{lastSubmission.storyPartId.toString()}</p>
-        <p className="text-lg">Round</p>
-        <p className="text-sm">{lastSubmission.round.toString()}</p>
-        <p className="text-lg">Published</p>
-        <p className="text-sm">{lastSubmission.published.toString()}</p>
-      </div>
-    );
-  });
-
-  console.log(roundData);
-
-  console.log(roundSubmissions);
+  // const lastSubmissionsElements = lastSubmissions?.map((lastSubmission, index) => {
+  //   return <SubmissionCard key={"last-submission-" + index} submission={lastSubmission} cardName="Last Submission" />;
+  // });
 
   async function refetchAll() {
     await refetchGetGlitterMinimum();
@@ -228,20 +180,23 @@ const Home: NextPage = () => {
             <p>Vote End Time: {roundData?.[4].toString()}</p>
           </div>
 
-          <div className="flex flex-col bg-secondary">
+          {/* <div className="flex flex-col bg-secondary">
             <p className="text-2xl">Round Submissions</p>
             {roundSubmissionsElements}
-          </div>
+          </div> */}
+
+          <SubmissionListCardCard submissions={roundSubmissions} cardName={"Round"} />
+          <SubmissionListCardCard submissions={lastSubmissions} cardName={"Last"} />
 
           <div className="flex flex-col bg-secondary">
             <p className="text-2xl">Round Submissions Story Ids</p>
             {roundSubmissionStoryIdsElements}
           </div>
 
-          <div className="flex flex-col bg-secondary">
+          {/* <div className="flex flex-col bg-secondary">
             <p className="text-2xl">Last Submissions</p>
             {lastSubmissionsElements}
-          </div>
+          </div> */}
 
           <div className="flex flex-col bg-secondary">
             <p className="text-2xl">Last Submissions Story Ids</p>
