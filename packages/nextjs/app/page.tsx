@@ -5,6 +5,7 @@ import { FormEvent } from "react";
 import type { NextPage } from "next";
 // import { SubmissionCard } from "~~/components/aavegotchi-chain-story/SubmissionCard";
 import { SubmissionListCardCard } from "~~/components/aavegotchi-chain-story/SubmissionListCard";
+import { SubmitStoryForm } from "~~/components/aavegotchi-chain-story/SubmitStoryForm";
 // import { useAccount } from "wagmi";
 // import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 // import { Address } from "~~/components/scaffold-eth";
@@ -116,24 +117,24 @@ const Home: NextPage = () => {
     await refetchAll();
   }
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  // async function onSubmit(event: FormEvent<HTMLFormElement>) {
+  //   event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+  //   const formData = new FormData(event.currentTarget);
 
-    const authorName = formData.get("authorName")!.toString();
-    const authorContact = formData.get("authorContact")!.toString();
-    const note = formData.get("note")!.toString();
-    const storyPart = formData.get("storyPart")!.toString();
-    const gltrAmount = BigInt(Number(formData.get("gltrAmount")!));
+  //   const authorName = formData.get("authorName")!.toString();
+  //   const authorContact = formData.get("authorContact")!.toString();
+  //   const note = formData.get("note")!.toString();
+  //   const storyPart = formData.get("storyPart")!.toString();
+  //   const gltrAmount = BigInt(Number(formData.get("gltrAmount")!));
 
-    await writeAavegotchiChainStoryAsync({
-      functionName: "submitStoryPart",
-      args: [authorName, authorContact, note, storyPart, gltrAmount],
-    });
+  //   await writeAavegotchiChainStoryAsync({
+  //     functionName: "submitStoryPart",
+  //     args: [authorName, authorContact, note, storyPart, gltrAmount],
+  //   });
 
-    await refetchAll();
-  }
+  //   await refetchAll();
+  // }
 
   return (
     <>
@@ -141,7 +142,8 @@ const Home: NextPage = () => {
         <div className="flex flex-col space-y-10">
           <p className="text-xl bg-secondary">AavegotchiChainStory Address: {AavegotchiChainStory?.address || "N/A"}</p>
 
-          <form onSubmit={onSubmit} className="flex flex-col bg-secondary">
+          <SubmitStoryForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />
+          {/* <form onSubmit={onSubmit} className="flex flex-col bg-secondary">
             <p className="text-xl">Create Story Part</p>
             <p>Name</p>
             <input type="text" id="authorName" name="authorName" />
@@ -154,7 +156,7 @@ const Home: NextPage = () => {
             <p>Gltr Amount</p>
             <input type="number" id="gltrAmount" name="gltrAmount" />
             <button className="btn btn-primary">Submit</button>
-          </form>
+          </form> */}
 
           <form className="flex flex-col bg-secondary" onSubmit={OnSetGltrMinimumSubmit}>
             <p>Gltr Minimum</p>
