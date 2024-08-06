@@ -140,103 +140,35 @@ const Home: NextPage = () => {
   //   await refetchAll();
   // }
 
+  async function onClick() {
+    await writeAavegotchiChainStoryAsync({
+      functionName: "updateRound",
+    });
+
+    await refetchAll();
+  }
+
   return (
     <>
       <div className="flex items-center flex-col flex-grow pt-10">
         <div className="flex flex-col space-y-10">
           <p className="text-xl bg-secondary">AavegotchiChainStory Address: {AavegotchiChainStory?.address || "N/A"}</p>
-
-          <SubmitStoryForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />
-          {/* <form onSubmit={onSubmit} className="flex flex-col bg-secondary">
-            <p className="text-xl">Create Story Part</p>
-            <p>Name</p>
-            <input type="text" id="authorName" name="authorName" />
-            <p>Contact</p>
-            <input type="text" id="authorContact" name="authorContact" />
-            <p>Note</p>
-            <input type="text" id="note" name="note" />
-            <p>Story Part</p>
-            <textarea className="h-[200px]" id="storyPart" name="storyPart" />
-            <p>Gltr Amount</p>
-            <input type="number" id="gltrAmount" name="gltrAmount" />
-            <button className="btn btn-primary">Submit</button>
-          </form> */}
-
-          <SetGltrMinimumForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />
-          {/* <form className="flex flex-col bg-secondary" onSubmit={OnSetGltrMinimumSubmit}>
-            <p>Gltr Minimum</p>
-            <input type="number" id="gltrMinimum" name="gltrMinimum" />
-
-            <button className="btn btn-primary">
-              {"Set Gltr Minimum (does not work - admin currently never set on smart contract)"}
-            </button>
-          </form> */}
-
           <p className="text-xl bg-secondary">Gltr Minimum: {glitterMinimum?.toString() || "N/A"}</p>
+          <p className="text-2xl bg-secondary">Can Submit Story Part: {canSubmitStoryPart?.toString()}</p>
+
           <RoundData round={roundData} />
-          {/* <div className="flex flex-col bg-secondary">
-            <p className="text-xl">Round Data</p>
-            <p>Round: {roundData?.[0].toString()}</p>
-
-            <p>Submission Start Time: {roundData?.[1].toString()}</p>
-
-            <p>Submission End Time: {roundData?.[2].toString()}</p>
-
-            <p>Vote Start Time: {roundData?.[3].toString()}</p>
-
-            <p>Vote End Time: {roundData?.[4].toString()}</p>
-          </div> */}
-
-          {/* <div className="flex flex-col bg-secondary">
-            <p className="text-2xl">Round Submissions</p>
-            {roundSubmissionsElements}
-          </div> */}
 
           <SubmissionListCardCard submissions={roundSubmissions} cardName={"Round"} />
           <SubmissionListCardCard submissions={lastSubmissions} cardName={"Last"} />
           <SubmissionStoryIdListCard submissions={roundSubmissionStoryIds} cardName={"Last"} />
           <SubmissionStoryIdListCard submissions={lastSubmissionStoryIds} cardName={"Last"} />
 
-          {/*             
-          <div className="flex flex-col bg-secondary">
-            <p className="text-2xl">Round Submissions Story Ids</p>
-            {roundSubmissionStoryIdsElements}
-          </div> */}
-
-          {/* <div className="flex flex-col bg-secondary">
-            <p className="text-2xl">Last Submissions</p>
-            {lastSubmissionsElements}
-          </div> */}
-
-          {/* <div className="flex flex-col bg-secondary">
-            <p className="text-2xl">Last Submissions Story Ids</p>
-            {lastSubmissionStoryIdsElements}
-          </div> */}
-
-          <div className="bg-secondary">
-            <p className="text-2xl">Can Submit Story Part</p>
-            {canSubmitStoryPart?.toString()}
-          </div>
-
+          <SubmitStoryForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />
+          <SetGltrMinimumForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />
           <StoryPartVoteForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />
-          {/* <form className="flex flex-col bg-secondary" onSubmit={OnStoryPartVote}>
-            <p>Story Part Vote</p>
-            <input type="number" id="storyPartId" name="storyPartId" />
 
-            <button className="btn btn-primary">{"Vote"}</button>
-          </form> */}
-
-          <button
-            className="btn btn-primary"
-            onClick={async () => {
-              await writeAavegotchiChainStoryAsync({
-                functionName: "updateRound",
-              });
-
-              await refetchAll();
-            }}
-          >
-            {"Update Round"}
+          <button className="btn btn-primary" onClick={onClick}>
+            Update Round
           </button>
         </div>
       </div>
