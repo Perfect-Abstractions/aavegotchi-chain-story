@@ -4,7 +4,7 @@ export const SetGltrMinimumForm = ({ writeAavegotchiChainStoryAsync, refetchAll 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const gltrMinimum = BigInt(Number(formData.get("gltrMinimum")!));
+    const gltrMinimum = BigInt(Number(formData.get("gltrMinimum")));
 
     await writeAavegotchiChainStoryAsync({
       functionName: "setGltrMinimum",

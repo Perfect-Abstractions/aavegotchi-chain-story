@@ -4,7 +4,7 @@ export const StoryPartVoteForm = ({ writeAavegotchiChainStoryAsync, refetchAll }
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const storyPartId = BigInt(Number(formData.get("storyPartId")!));
+    const storyPartId = BigInt(Number(formData.get("storyPartId")));
 
     await writeAavegotchiChainStoryAsync({
       functionName: "storyPartVote",

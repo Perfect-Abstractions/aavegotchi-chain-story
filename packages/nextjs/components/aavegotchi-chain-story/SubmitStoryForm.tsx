@@ -6,11 +6,11 @@ export const SubmitStoryForm = ({ writeAavegotchiChainStoryAsync, refetchAll }: 
 
     const formData = new FormData(event.currentTarget);
 
-    const authorName = formData.get("authorName")!.toString();
-    const authorContact = formData.get("authorContact")!.toString();
-    const note = formData.get("note")!.toString();
-    const storyPart = formData.get("storyPart")!.toString();
-    const gltrAmount = BigInt(Number(formData.get("gltrAmount")!));
+    const authorName = formData.get("authorName")?.toString();
+    const authorContact = formData.get("authorContact")?.toString();
+    const note = formData.get("note")?.toString();
+    const storyPart = formData.get("storyPart")?.toString();
+    const gltrAmount = BigInt(Number(formData.get("gltrAmount")));
 
     await writeAavegotchiChainStoryAsync({
       functionName: "submitStoryPart",
