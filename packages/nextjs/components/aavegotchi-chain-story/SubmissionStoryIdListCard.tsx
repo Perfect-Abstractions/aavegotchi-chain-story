@@ -1,15 +1,13 @@
-import { SubmissionStoryIdCard } from "./SubmissionStoryIdCard";
+import { StoryPartIdCard } from "./StoryPartIdCard";
 
 export const SubmissionStoryIdListCard = ({ submissionStoryIds, cardName }: any) => {
-  const storyIdsElements = submissionStoryIds?.map((id: any) => {
-    return (
-      <SubmissionStoryIdCard key={`${cardName}-submission-story-id-`} submissionStoryId={id} cardName={cardName} />
-    );
+  const elements = submissionStoryIds?.map((id: any) => {
+    return <StoryPartIdCard key={`${cardName}-submission-story-id-`} storyId={id} cardName={cardName} />;
   });
   return (
     <div className="flex flex-col bg-secondary">
       <p className="text-2xl">{cardName} Submissions Story Ids</p>
-      {storyIdsElements}
+      {elements}
     </div>
   );
 };

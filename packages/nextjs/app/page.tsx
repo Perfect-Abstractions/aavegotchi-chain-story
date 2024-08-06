@@ -3,8 +3,8 @@
 import type { NextPage } from "next";
 import { RoundData } from "~~/components/aavegotchi-chain-story/RoundData";
 import { SetGltrMinimumForm } from "~~/components/aavegotchi-chain-story/SetGltrMinimumForm";
+import { StoryPartListCard } from "~~/components/aavegotchi-chain-story/StoryPartListCard";
 import { StoryPartVoteForm } from "~~/components/aavegotchi-chain-story/StoryPartVoteForm";
-import { SubmissionListCardCard } from "~~/components/aavegotchi-chain-story/SubmissionListCard";
 import { SubmissionStoryIdListCard } from "~~/components/aavegotchi-chain-story/SubmissionStoryIdListCard";
 import { SubmitStoryForm } from "~~/components/aavegotchi-chain-story/SubmitStoryForm";
 import { useScaffoldContract, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
@@ -91,12 +91,12 @@ const Home: NextPage = () => {
 
           <RoundData round={roundData} />
 
-          <SubmissionListCardCard submissions={roundSubmissions} cardName={"Round"} />
-          <SubmissionListCardCard submissions={lastSubmissions} cardName={"Last"} />
-          <SubmissionListCardCard submissions={publishedStoryParts} cardName={"Published"} />
-          <SubmissionStoryIdListCard submissions={roundSubmissionStoryIds} cardName={"Round"} />
-          <SubmissionStoryIdListCard submissions={lastSubmissionStoryIds} cardName={"Last"} />
-          <SubmissionStoryIdListCard submissions={publishedStoryPartIds} cardName={"Published"} />
+          <StoryPartListCard storyParts={roundSubmissions} cardName={"Round"} />
+          <StoryPartListCard storyParts={lastSubmissions} cardName={"Last"} />
+          <StoryPartListCard storyParts={publishedStoryParts} cardName={"Published"} />
+          <SubmissionStoryIdListCard storyParts={roundSubmissionStoryIds} cardName={"Round"} />
+          <SubmissionStoryIdListCard storyParts={lastSubmissionStoryIds} cardName={"Last"} />
+          <SubmissionStoryIdListCard storyParts={publishedStoryPartIds} cardName={"Published"} />
 
           <SubmitStoryForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />
           <SetGltrMinimumForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />

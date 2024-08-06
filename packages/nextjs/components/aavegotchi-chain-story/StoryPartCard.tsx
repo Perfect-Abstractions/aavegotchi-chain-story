@@ -1,8 +1,8 @@
-export const SubmissionCard = ({ submission, uuiv, cardName }: any) => {
+export const StoryPartCard = ({ submission, uuiv, cardName }: any) => {
   return (
     <div className="flex flex-col">
       <p className="text-xl">
-        {cardName} Submission #{uuiv}
+        {cardName} Story Part #{uuiv}
       </p>
       <p className="text-lg">Author Address</p>
       <p className="text-sm">{submission.authorAddress}</p>
