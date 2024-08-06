@@ -370,6 +370,84 @@ const deployedContracts = {
         },
         {
           inputs: [],
+          name: "getPublishedStoryPartIds",
+          outputs: [
+            {
+              internalType: "uint24[]",
+              name: "storyPartIds_",
+              type: "uint24[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getPublishedStoryParts",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "authorAddress",
+                  type: "address",
+                },
+                {
+                  internalType: "string",
+                  name: "authorName",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "authorContact",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "note",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "storyPart",
+                  type: "string",
+                },
+                {
+                  internalType: "uint104",
+                  name: "gltrAmount",
+                  type: "uint104",
+                },
+                {
+                  internalType: "uint104",
+                  name: "voteScore",
+                  type: "uint104",
+                },
+                {
+                  internalType: "uint24",
+                  name: "storyPartId",
+                  type: "uint24",
+                },
+                {
+                  internalType: "uint16",
+                  name: "round",
+                  type: "uint16",
+                },
+                {
+                  internalType: "bool",
+                  name: "published",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct AavegotchiChainStory.StoryPart[]",
+              name: "storyParts_",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
           name: "getRoundData",
           outputs: [
             {

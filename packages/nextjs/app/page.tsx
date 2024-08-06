@@ -51,6 +51,16 @@ const Home: NextPage = () => {
     functionName: "canSubmitStoryPart",
   });
 
+  const { data: publishedStoryParts, refetch: refetchPublishedStoryParts } = useScaffoldReadContract({
+    contractName: "AavegotchiChainStory",
+    functionName: "getPublishedStoryParts",
+  });
+
+  const { data: publishedStoryPartIds, refetch: refetchPublishedStoryPartIds } = useScaffoldReadContract({
+    contractName: "AavegotchiChainStory",
+    functionName: "getPublishedStoryPartIds",
+  });
+
   async function refetchAll() {
     await refetchGetGlitterMinimum();
     await refetchRoundData();
@@ -59,6 +69,8 @@ const Home: NextPage = () => {
     await refetchRoundSubmissionStoryIds();
     await refetchLastSubmissionStoryIds();
     await refetchCanSubmitStoryPart();
+    await refetchPublishedStoryParts();
+    await refetchPublishedStoryPartIds();
   }
 
   async function onClick() {
@@ -81,8 +93,10 @@ const Home: NextPage = () => {
 
           <SubmissionListCardCard submissions={roundSubmissions} cardName={"Round"} />
           <SubmissionListCardCard submissions={lastSubmissions} cardName={"Last"} />
-          <SubmissionStoryIdListCard submissions={roundSubmissionStoryIds} cardName={"Last"} />
+          <SubmissionListCardCard submissions={publishedStoryParts} cardName={"Published"} />
+          <SubmissionStoryIdListCard submissions={roundSubmissionStoryIds} cardName={"Round"} />
           <SubmissionStoryIdListCard submissions={lastSubmissionStoryIds} cardName={"Last"} />
+          <SubmissionStoryIdListCard submissions={publishedStoryPartIds} cardName={"Published"} />
 
           <SubmitStoryForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />
           <SetGltrMinimumForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />
