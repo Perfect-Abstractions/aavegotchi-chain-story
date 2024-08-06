@@ -1,6 +1,8 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
+import {IERC20} from "./interfaces/IERC20.sol";
+
 // Useful for debugging. Remove when deploying to a live network.
 import "hardhat/console.sol";
 
@@ -13,6 +15,8 @@ import "hardhat/console.sol";
  * @author BuidlGuidl
  */
 contract AavegotchiChainStory {
+
+    IERC20 constant GLTR_ERC20_TOKEN = IERC20(0x3801C3B3B5c98F88a9c9005966AA96aa440B9Afc);
 
     bytes32 constant AAVEGOTCHI_CHAIN_STORY_STORAGE_POSITION = keccak256("aavegotchi-chain-story.storage");
 
@@ -285,7 +289,7 @@ contract AavegotchiChainStory {
         s.roundSubmissions[round].push(uint24(storyPartId));        
         author.storyPartIds.push(uint24(storyPartId));
         s.newSubmissionInRound = true;
-
+        GLTR_ERC20_TOKEN.transferFrom(msg.sender, address(this), _gltrAmount);
         emit StoryPartSubmission(round, storyPartId, msg.sender);
     }
      
@@ -434,6 +438,56 @@ contract AavegotchiChainStory {
             round--;
         }        
         storyParts_ = internalGetRoundSubmissions(round);        
+    }
+
+    function getPublishedStoryParts() external view returns(StoryPart[] memory storyParts_) {
+        uint256 storyPartsLength = s.publishedStoryParts.length;
+        bool addNewStoryPart = false;
+        uint256 winningStoryPartId;
+        if(canSubmitStoryPartAfterFourteenDays() && s.newSubmissionInRound) {
+            winningStoryPartId = s.winningSubmissionStoryPartId;
+            StoryPart storage winningStoryPart = s.storyParts[winningStoryPartId];
+             // If there were no votes this is false
+            if(winningStoryPart.voteScore > s.noSubmissionVoteScore) {                 
+                addNewStoryPart = true;
+            }
+        }
+        if(addNewStoryPart) {
+            storyParts_ = new StoryPart[](storyPartsLength + 1);
+        }
+        else {
+            storyParts_ = new StoryPart[](storyPartsLength);
+        }        
+        for(uint256 i; i < storyPartsLength - 1; i++) {
+            storyParts_[i] = s.storyParts[s.publishedStoryParts[i]];
+        }
+        if(addNewStoryPart) {
+            storyParts_[storyPartsLength] = s.storyParts[winningStoryPartId];
+        }
+    }
+
+    function getPublishedStoryPartIds() external view returns(uint24[] memory storyPartIds_) {
+        bool addNewStoryPart = false;
+        uint256 winningStoryPartId;
+        if(canSubmitStoryPartAfterFourteenDays() && s.newSubmissionInRound) {
+            winningStoryPartId = s.winningSubmissionStoryPartId;
+            StoryPart storage winningStoryPart = s.storyParts[winningStoryPartId];
+             // If there were no votes this is false
+            if(winningStoryPart.voteScore > s.noSubmissionVoteScore) {                 
+                addNewStoryPart = true;
+            }
+        }        
+        if(addNewStoryPart) {
+            uint256 length = s.publishedStoryParts.length;
+            storyPartIds_ = new uint24[](length + 1);
+            for(uint256 i; i < length; i++) {
+                storyPartIds_[i] = s.publishedStoryParts[i];
+            }
+            storyPartIds_[length] = uint24(winningStoryPartId);
+        }
+        else {
+            storyPartIds_ = s.publishedStoryParts;
+        }
     }
 
 
