@@ -1,23 +1,15 @@
 "use client";
 
-// import { FormEvent } from "react";
-// import Link from "next/link";
 import type { NextPage } from "next";
 import { RoundData } from "~~/components/aavegotchi-chain-story/RoundData";
 import { SetGltrMinimumForm } from "~~/components/aavegotchi-chain-story/SetGltrMinimumForm";
 import { StoryPartVoteForm } from "~~/components/aavegotchi-chain-story/StoryPartVoteForm";
-// import { SubmissionCard } from "~~/components/aavegotchi-chain-story/SubmissionCard";
 import { SubmissionListCardCard } from "~~/components/aavegotchi-chain-story/SubmissionListCard";
 import { SubmissionStoryIdListCard } from "~~/components/aavegotchi-chain-story/SubmissionStoryIdListCard";
 import { SubmitStoryForm } from "~~/components/aavegotchi-chain-story/SubmitStoryForm";
-// import { useAccount } from "wagmi";
-// import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-// import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldContract, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
-  // const { address: connectedAddress } = useAccount();
-
   const { data: AavegotchiChainStory } = useScaffoldContract({ contractName: "AavegotchiChainStory" });
 
   const { writeContractAsync: writeAavegotchiChainStoryAsync } = useScaffoldWriteContract("AavegotchiChainStory");
@@ -59,32 +51,6 @@ const Home: NextPage = () => {
     functionName: "canSubmitStoryPart",
   });
 
-  // const roundSubmissionStoryIdsElements = roundSubmissionStoryIds?.map((id, index) => {
-  //   return (
-  //     <div key={"round-submission-story-id-" + index} className="flex flex-col">
-  //       <p className="text-xl">Round Submission Story Id: {id.toString()}</p>
-  //     </div>
-  //   );
-  // });
-
-  // const lastSubmissionStoryIdsElements = lastSubmissionStoryIds?.map((id, index) => {
-  //   return (
-  //     <div key={"last-submission-story-id-" + index} className="flex flex-col">
-  //       <p className="text-xl">Last Submission Story Id: {id.toString()}</p>
-  //     </div>
-  //   );
-  // });
-
-  // const roundSubmissionsElements = roundSubmissions?.map((roundSubmission, index) => {
-  //   return (
-  //     <SubmissionCard key={"round-submission-" + index} submission={roundSubmission} cardName="Round Submission" />
-  //   );
-  // });
-
-  // const lastSubmissionsElements = lastSubmissions?.map((lastSubmission, index) => {
-  //   return <SubmissionCard key={"last-submission-" + index} submission={lastSubmission} cardName="Last Submission" />;
-  // });
-
   async function refetchAll() {
     await refetchGetGlitterMinimum();
     await refetchRoundData();
@@ -94,51 +60,6 @@ const Home: NextPage = () => {
     await refetchLastSubmissionStoryIds();
     await refetchCanSubmitStoryPart();
   }
-
-  // async function OnStoryPartVote(event: FormEvent<HTMLFormElement>) {
-  //   event.preventDefault();
-  //   const formData = new FormData(event.currentTarget);
-  //   const storyPartId = BigInt(Number(formData.get("storyPartId")!));
-
-  //   await writeAavegotchiChainStoryAsync({
-  //     functionName: "storyPartVote",
-  //     args: [storyPartId],
-  //   });
-
-  //   await refetchAll();
-  // }
-
-  // async function OnSetGltrMinimumSubmit(event: FormEvent<HTMLFormElement>) {
-  //   event.preventDefault();
-  //   const formData = new FormData(event.currentTarget);
-  //   const gltrMinimum = BigInt(Number(formData.get("gltrMinimum")!));
-
-  //   await writeAavegotchiChainStoryAsync({
-  //     functionName: "setGltrMinimum",
-  //     args: [gltrMinimum],
-  //   });
-
-  //   await refetchAll();
-  // }
-
-  // async function onSubmit(event: FormEvent<HTMLFormElement>) {
-  //   event.preventDefault();
-
-  //   const formData = new FormData(event.currentTarget);
-
-  //   const authorName = formData.get("authorName")!.toString();
-  //   const authorContact = formData.get("authorContact")!.toString();
-  //   const note = formData.get("note")!.toString();
-  //   const storyPart = formData.get("storyPart")!.toString();
-  //   const gltrAmount = BigInt(Number(formData.get("gltrAmount")!));
-
-  //   await writeAavegotchiChainStoryAsync({
-  //     functionName: "submitStoryPart",
-  //     args: [authorName, authorContact, note, storyPart, gltrAmount],
-  //   });
-
-  //   await refetchAll();
-  // }
 
   async function onClick() {
     await writeAavegotchiChainStoryAsync({
