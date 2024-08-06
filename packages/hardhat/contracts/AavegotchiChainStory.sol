@@ -464,7 +464,30 @@ contract AavegotchiChainStory {
         if(addNewStoryPart) {
             storyParts_[storyPartsLength] = s.storyParts[winningStoryPartId];
         }
+    }
 
+    function getPublishedStoryPartIds() external view returns(uint24[] memory storyPartIds_) {
+        bool addNewStoryPart = false;
+        uint256 winningStoryPartId;
+        if(canSubmitStoryPartAfterFourteenDays() && s.newSubmissionInRound) {
+            winningStoryPartId = s.winningSubmissionStoryPartId;
+            StoryPart storage winningStoryPart = s.storyParts[winningStoryPartId];
+             // If there were no votes this is false
+            if(winningStoryPart.voteScore > s.noSubmissionVoteScore) {                 
+                addNewStoryPart = true;
+            }
+        }        
+        if(addNewStoryPart) {
+            uint256 length = s.publishedStoryParts.length;
+            storyPartIds_ = new uint24[](length + 1);
+            for(uint256 i; i < length; i++) {
+                storyPartIds_[i] = s.publishedStoryParts[i];
+            }
+            storyPartIds_[length] = uint24(winningStoryPartId);
+        }
+        else {
+            storyPartIds_ = s.publishedStoryParts;
+        }
     }
 
 
