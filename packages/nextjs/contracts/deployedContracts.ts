@@ -4,6 +4,706 @@
  */
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
-const deployedContracts = {} as const;
+const deployedContracts = {
+  31337: {
+    AavegotchiChainStory: {
+      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "_authorName",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_authorContact",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_note",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_storyPart",
+              type: "string",
+            },
+            {
+              internalType: "uint256",
+              name: "_gltrAmount",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_voter",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "_round",
+              type: "uint256",
+            },
+          ],
+          name: "AlreadyVotedInRound",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_voter",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "_storyPartId",
+              type: "uint256",
+            },
+          ],
+          name: "CantVoteOnSubmissionFromEarlierRound",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "ExistingAuthor",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_gltrAmount",
+              type: "uint256",
+            },
+          ],
+          name: "GltrBelowMinimum",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_newGltrMinimum",
+              type: "uint256",
+            },
+          ],
+          name: "GltrMinimumTooLow",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "MaximumSubmissionsReached",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "MissingAuthorInfo",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "MissingStoryPart",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_person",
+              type: "address",
+            },
+          ],
+          name: "NoPowerToVote",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "NotAdmin",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_currentTime",
+              type: "uint256",
+            },
+          ],
+          name: "NotStorySubmissionTimePeriod",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_currentTime",
+              type: "uint256",
+            },
+          ],
+          name: "NotVotingTimePeriod",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "_round",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_voteScore",
+              type: "uint256",
+            },
+          ],
+          name: "NoVoteRound",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "_round",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "_storyPartId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "_authorAddress",
+              type: "address",
+            },
+          ],
+          name: "StoryPartPublished",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "_round",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "_storyPartId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "_authorAddress",
+              type: "address",
+            },
+          ],
+          name: "StoryPartSubmission",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "_voter",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "_round",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "_storyPartId",
+              type: "uint256",
+            },
+          ],
+          name: "SubmissionVote",
+          type: "event",
+        },
+        {
+          inputs: [],
+          name: "canSubmitStoryPart",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "can_",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getGltrMinimum",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getLastSubmissionStoryIds",
+          outputs: [
+            {
+              internalType: "uint24[]",
+              name: "storyPartIds_",
+              type: "uint24[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getLastSubmissions",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "authorAddress",
+                  type: "address",
+                },
+                {
+                  internalType: "string",
+                  name: "authorName",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "authorContact",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "note",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "storyPart",
+                  type: "string",
+                },
+                {
+                  internalType: "uint104",
+                  name: "gltrAmount",
+                  type: "uint104",
+                },
+                {
+                  internalType: "uint104",
+                  name: "voteScore",
+                  type: "uint104",
+                },
+                {
+                  internalType: "uint24",
+                  name: "storyPartId",
+                  type: "uint24",
+                },
+                {
+                  internalType: "uint16",
+                  name: "round",
+                  type: "uint16",
+                },
+                {
+                  internalType: "bool",
+                  name: "published",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct AavegotchiChainStory.StoryPart[]",
+              name: "storyParts_",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getRoundData",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "round_",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "submissionStartTime_",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "submissionEndTime_",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "voteStartTime_",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "voteEndTime_",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_round",
+              type: "uint256",
+            },
+          ],
+          name: "getRoundSubmissionStoryIds",
+          outputs: [
+            {
+              internalType: "uint24[]",
+              name: "storyPartIds_",
+              type: "uint24[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_round",
+              type: "uint256",
+            },
+          ],
+          name: "getRoundSubmissions",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "authorAddress",
+                  type: "address",
+                },
+                {
+                  internalType: "string",
+                  name: "authorName",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "authorContact",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "note",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "storyPart",
+                  type: "string",
+                },
+                {
+                  internalType: "uint104",
+                  name: "gltrAmount",
+                  type: "uint104",
+                },
+                {
+                  internalType: "uint104",
+                  name: "voteScore",
+                  type: "uint104",
+                },
+                {
+                  internalType: "uint24",
+                  name: "storyPartId",
+                  type: "uint24",
+                },
+                {
+                  internalType: "uint16",
+                  name: "round",
+                  type: "uint16",
+                },
+                {
+                  internalType: "bool",
+                  name: "published",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct AavegotchiChainStory.StoryPart[]",
+              name: "storyParts_",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_newGltrMinimum",
+              type: "uint256",
+            },
+          ],
+          name: "setGltrMinimum",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_storyPartId",
+              type: "uint256",
+            },
+          ],
+          name: "storyPartVote",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "_authorName",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_authorContact",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_note",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_storyPart",
+              type: "string",
+            },
+            {
+              internalType: "uint256",
+              name: "_gltrAmount",
+              type: "uint256",
+            },
+          ],
+          name: "submitStoryPart",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "updateRound",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+    YourContract: {
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_owner",
+              type: "address",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "greetingSetter",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "newGreeting",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "bool",
+              name: "premium",
+              type: "bool",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "value",
+              type: "uint256",
+            },
+          ],
+          name: "GreetingChange",
+          type: "event",
+        },
+        {
+          inputs: [],
+          name: "greeting",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "owner",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "premium",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "_newGreeting",
+              type: "string",
+            },
+          ],
+          name: "setGreeting",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "totalCounter",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "userGreetingCounter",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "withdraw",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          stateMutability: "payable",
+          type: "receive",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+  },
+} as const;
 
 export default deployedContracts satisfies GenericContractsDeclaration;
