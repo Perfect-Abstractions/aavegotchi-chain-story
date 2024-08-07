@@ -50,7 +50,7 @@ export const AddressInfoDropdown = ({
       <details ref={dropdownRef} className="dropdown dropdown-end leading-3">
         <summary tabIndex={0} className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md dropdown-toggle gap-0 !h-auto">
           <BlockieAvatar address={checkSumAddress} size={30} ensImage={ensAvatar} />
-          <span className="ml-2 mr-1">
+          <span className="ml-2 mr-1 kanit">
             {isENS(displayName) ? displayName : checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4)}
           </span>
           <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
@@ -84,7 +84,7 @@ export const AddressInfoDropdown = ({
                     className="text-xl font-normal h-6 w-4 cursor-pointer ml-2 sm:ml-0"
                     aria-hidden="true"
                   />
-                  <span className=" whitespace-nowrap">Copy address</span>
+                  <span className=" whitespace-nowrap kanit">Copy address</span>
                 </div>
               </CopyToClipboard>
             )}
@@ -92,7 +92,7 @@ export const AddressInfoDropdown = ({
           <li className={selectingNetwork ? "hidden" : ""}>
             <label htmlFor="qrcode-modal" className="btn-sm !rounded-xl flex gap-3 py-3">
               <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
-              <span className="whitespace-nowrap">View QR Code</span>
+              <span className="whitespace-nowrap kanit">View QR Code</span>
             </label>
           </li>
           <li className={selectingNetwork ? "hidden" : ""}>
@@ -102,7 +102,7 @@ export const AddressInfoDropdown = ({
                 target="_blank"
                 href={blockExplorerAddressLink}
                 rel="noopener noreferrer"
-                className="whitespace-nowrap"
+                className="whitespace-nowrap kanit"
               >
                 View on Block Explorer
               </a>
@@ -117,7 +117,7 @@ export const AddressInfoDropdown = ({
                   setSelectingNetwork(true);
                 }}
               >
-                <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Switch Network</span>
+                <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0 kanit" /> <span>Switch Network</span>
               </button>
             </li>
           ) : null}
@@ -127,7 +127,7 @@ export const AddressInfoDropdown = ({
               type="button"
               onClick={() => disconnect()}
             >
-              <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
+              <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0 kanit" /> <span>Disconnect</span>
             </button>
           </li>
         </ul>

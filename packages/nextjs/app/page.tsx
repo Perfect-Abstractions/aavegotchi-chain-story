@@ -7,6 +7,7 @@ import { StoryPartListCard } from "~~/components/aavegotchi-chain-story/StoryPar
 import { StoryPartVoteForm } from "~~/components/aavegotchi-chain-story/StoryPartVoteForm";
 import { SubmissionStoryIdListCard } from "~~/components/aavegotchi-chain-story/SubmissionStoryIdListCard";
 import { SubmitStoryForm } from "~~/components/aavegotchi-chain-story/SubmitStoryForm";
+import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldContract, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
@@ -86,13 +87,19 @@ const Home: NextPage = () => {
       <div className="flex items-center flex-col flex-grow pt-10">
         <div className="flex flex-col space-y-10">
           <p className="text-center text-3xl lg:text-9xl aavegotchi">Avegotchi chain story</p>
-          <div className="flex flex-col bg-secondary">
-            <p className="text-xl kanit">Contract Address</p>
-            <p className="kanit-light">{AavegotchiChainStory?.address || "N/A"}</p>
+          <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
+            <p className="text-4xl kanit">Contract Address</p>
+            <Address address={AavegotchiChainStory?.address} format="long" />
           </div>
-          <p className="text-xl bg-secondary">Gltr Minimum: {glitterMinimum?.toString() || "N/A"}</p>
-          <p className="text-2xl bg-secondary">Can Submit Story Part: {canSubmitStoryPart?.toString()}</p>
+          <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
+            <p className="text-4xl kanit">Gltr Minimum</p>
+            <p className="kanit-light">{glitterMinimum?.toString() || "N/A"}</p>
+          </div>
 
+          <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
+            <p className="text-4xl">Can Submit Story Part</p>
+            <p className="kanit-light">{canSubmitStoryPart?.toString()}</p>
+          </div>
           <RoundData round={roundData} />
 
           <StoryPartListCard storyParts={roundSubmissions} cardName={"Round"} />
