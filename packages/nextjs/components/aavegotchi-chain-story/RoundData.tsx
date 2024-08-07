@@ -12,30 +12,40 @@ export const RoundData = ({ round }: any) => {
   const voteEndDateString = voteEndDate.toLocaleString();
 
   return (
-    <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1 text-center">
+    <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1 text-center space-y-2">
       <p className="text-4xl kanit">Round Data</p>
-      <p className="text-2xl kanit">Round</p>
-      <p className="text-xl kanit-light">{round?.[0].toString()}</p>
 
-      <p className="text-2xl kanit">Submission Start Time </p>
-      <p className="text-xl kanit-light">
-        {startDateString} ({round?.[1].toString()})
-      </p>
+      <div className="bg-base-100 rounded-lg">
+        <p className="text-2xl kanit">Round</p>
+        <p className="text-xl kanit-light">{round?.[0].toString()}</p>
+      </div>
 
-      <p className="text-2xl kanit">Submission End Time</p>
-      <p className="text-xl kanit-light">
-        {endDateString} ({round?.[2].toString()})
-      </p>
+      <div className="bg-base-100 rounded-lg">
+        <p className="text-2xl kanit">Submission Start Time </p>
+        <p className="text-xl kanit-light">
+          {startDateString} ({round?.[1].toString()})
+        </p>
+      </div>
 
-      <p className="text-2xl kanit">Vote Start Time</p>
-      <p className="text-xl kanit-light">
-        {voteStartDateString} ({round?.[3].toString()})
-      </p>
+      <div className="bg-base-100 rounded-lg">
+        <p className="text-2xl kanit">Submission End Time</p>
+        <p className="text-xl kanit-light">
+          {endDateString} ({round?.[2].toString()})
+        </p>
+      </div>
+      <div className="bg-base-100 rounded-lg">
+        <p className="text-2xl kanit">Vote Start Time</p>
+        <p className="text-xl kanit-light">
+          {voteStartDateString} ({round?.[3].toString()})
+        </p>
+      </div>
 
-      <p className="text-2xl kanit">Vote End Time</p>
-      <p className="text-xl kanit-light">
-        {voteEndDateString} ({round?.[4].toString()})
-      </p>
+      <div className="bg-base-100 rounded-lg">
+        <p className="text-2xl kanit">Vote End Time</p>
+        <p className="text-xl kanit-light">
+          {voteEndDateString} ({round?.[4].toString()})
+        </p>
+      </div>
     </div>
   );
 };

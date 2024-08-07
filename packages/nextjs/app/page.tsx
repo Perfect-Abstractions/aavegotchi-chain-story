@@ -89,7 +89,7 @@ const Home: NextPage = () => {
           <p className="text-center text-3xl lg:text-9xl aavegotchi">Avegotchi chain story</p>
           <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
             <p className="text-4xl kanit">Contract Address</p>
-            <Address address={AavegotchiChainStory?.address} format="long" />
+            <Address address={AavegotchiChainStory?.address} />
           </div>
           <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
             <p className="text-4xl kanit">Gltr Minimum</p>
