@@ -1,4 +1,4 @@
-# 🏗 Aavegotchi Chain Story
+# Aavegotchi Chain Story
 
 <h4 align="center">
   <a href="https://github.com/Perfect-Abstractions/aavegotchi-chain-story/wiki">Wiki</a> |
