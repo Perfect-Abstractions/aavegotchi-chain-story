@@ -2,6 +2,36 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+
+@font-face {
+  font-family: "aavegotchi";
+  src: url('../fonts/AAVEGOTCHi_FONT_V1.otf');
+}
+
+.aavegotchi {
+  font-family: "aavegotchi";
+}
+
+@font-face {
+  font-family: "kanit";
+  src: url('../fonts/Kanit//Kanit-Regular.ttf');
+}
+
+.kanit {
+  font-family: "kanit";
+}
+
+@font-face {
+  font-family: "kanit-light";
+  src: url('../fonts/Kanit//Kanit-Light.ttf');
+}
+
+.kanit-light {
+  font-family: "kanit-light";
+}
+
+
+
 :root,
 [data-theme] {
   background: oklch(var(--b2));
@@ -20,7 +50,7 @@ h4 {
 }
 
 p {
-  margin: 1rem 0;
+  /* margin: 1rem 0; */
 }
 
 .btn {

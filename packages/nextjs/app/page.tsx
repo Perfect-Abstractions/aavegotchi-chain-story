@@ -85,7 +85,11 @@ const Home: NextPage = () => {
     <>
       <div className="flex items-center flex-col flex-grow pt-10">
         <div className="flex flex-col space-y-10">
-          <p className="text-xl bg-secondary">AavegotchiChainStory Address: {AavegotchiChainStory?.address || "N/A"}</p>
+          <p className="text-center text-3xl lg:text-9xl aavegotchi">Avegotchi chain story</p>
+          <div className="flex flex-col bg-secondary">
+            <p className="text-xl kanit">Contract Address</p>
+            <p className="kanit-light">{AavegotchiChainStory?.address || "N/A"}</p>
+          </div>
           <p className="text-xl bg-secondary">Gltr Minimum: {glitterMinimum?.toString() || "N/A"}</p>
           <p className="text-2xl bg-secondary">Can Submit Story Part: {canSubmitStoryPart?.toString()}</p>
 
