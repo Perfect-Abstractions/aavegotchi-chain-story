@@ -1,6 +1,7 @@
 import { FormEvent } from "react";
+import { formatEther } from "viem";
 
-export const SubmitStoryForm = ({ writeAavegotchiChainStoryAsync, refetchAll }: any) => {
+export const SubmitStoryForm = ({ writeAavegotchiChainStoryAsync, refetchAll, gltrMinimum }: any) => {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -18,6 +19,10 @@ export const SubmitStoryForm = ({ writeAavegotchiChainStoryAsync, refetchAll }: 
     });
 
     await refetchAll();
+  }
+
+  function numberWithCommas(x: any) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   return (
@@ -55,7 +60,7 @@ export const SubmitStoryForm = ({ writeAavegotchiChainStoryAsync, refetchAll }: 
         type="number"
         id="gltrAmount"
         name="gltrAmount"
-        placeholder="50000000000000"
+        placeholder={numberWithCommas(formatEther(gltrMinimum || BigInt(0)))}
         className="text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-[#1A0335] dark:border-[#FEF87D] dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
       />
 

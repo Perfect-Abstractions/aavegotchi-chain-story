@@ -1,6 +1,7 @@
 "use client";
 
 import type { NextPage } from "next";
+import { formatEther } from "viem";
 import { RoundData } from "~~/components/aavegotchi-chain-story/RoundData";
 import { SetGltrMinimumForm } from "~~/components/aavegotchi-chain-story/SetGltrMinimumForm";
 import { StoryPartListCard } from "~~/components/aavegotchi-chain-story/StoryPartListCard";
@@ -82,6 +83,10 @@ const Home: NextPage = () => {
     await refetchAll();
   }
 
+  function numberWithCommas(x: any) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   return (
     <>
       <div className="flex items-center flex-col flex-grow pt-10">
@@ -93,7 +98,9 @@ const Home: NextPage = () => {
           </div>
           <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
             <p className="text-4xl kanit">Gltr Minimum</p>
-            <p className="kanit-light">{glitterMinimum?.toString() || "N/A"}</p>
+            <p className="kanit-light">
+              {numberWithCommas(formatEther(glitterMinimum || BigInt(0))).toString() || "N/A"}
+            </p>
           </div>
 
           <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
@@ -109,8 +116,16 @@ const Home: NextPage = () => {
           <SubmissionStoryIdListCard storyParts={lastSubmissionStoryIds} cardName={"Last"} />
           <SubmissionStoryIdListCard storyParts={publishedStoryPartIds} cardName={"Published"} />
 
-          <SubmitStoryForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />
-          <SetGltrMinimumForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />
+          <SubmitStoryForm
+            writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync}
+            refetchAll={refetchAll}
+            gltrMinimum={glitterMinimum}
+          />
+          <SetGltrMinimumForm
+            writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync}
+            refetchAll={refetchAll}
+            gltrMinimum={glitterMinimum}
+          />
           <StoryPartVoteForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />
 
           <button className="btn btn-primary" onClick={onClick}>
