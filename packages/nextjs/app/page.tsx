@@ -90,7 +90,7 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="flex items-center flex-col flex-grow pt-10">
-        <div className="flex flex-col space-y-10">
+        <div className="flex items-center flex-col space-y-10">
           <p className="text-center text-3xl lg:text-9xl aavegotchi">Avegotchi chain story</p>
           <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
             <p className="text-4xl kanit">Contract Address</p>
