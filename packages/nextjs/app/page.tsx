@@ -91,48 +91,63 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="flex items-center flex-col flex-grow pt-10">
-        <div className="flex items-center flex-col space-y-10">
+        <div className="flex items-center flex-col w-full">
           <p className="text-center text-3xl lg:text-9xl aavegotchi">Avegotchi chain story</p>
-          <NewsletterForm />
-          <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
-            <p className="text-4xl kanit">Contract Address</p>
-            <Address address={AavegotchiChainStory?.address} />
-          </div>
-          <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
-            <p className="text-4xl kanit">Gltr Minimum</p>
-            <p className="kanit-light">
-              {numberWithCommas(formatEther(glitterMinimum || BigInt(0))).toString() || "N/A"}
-            </p>
+
+          <div className="bg-secondary w-full">
+            <p className="kanit-light text-2xl text-center">{"It’s not a cryptocurrency."}</p>
+            <p className="kanit-light text-2xl text-center">{"It’s not an NFT."}</p>
+            <p className="kanit-light text-2xl text-center">{"It’s not a token."}</p>
+            <p className="kanit text-4xl text-center">{"It is a chain story contract."}</p>
           </div>
 
-          <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
-            <p className="text-4xl">Can Submit Story Part</p>
-            <p className="kanit-light">{canSubmitStoryPart?.toString()}</p>
+          <div className="flex items-center flex-col space-y-10">
+            <div className="m-10">
+              <NewsletterForm />
+            </div>
+            <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
+              <p className="text-4xl kanit">Contract Address</p>
+              <Address address={AavegotchiChainStory?.address} />
+            </div>
+            <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
+              <p className="text-4xl kanit">Gltr Minimum</p>
+              <p className="kanit-light">
+                {numberWithCommas(formatEther(glitterMinimum || BigInt(0))).toString() || "N/A"}
+              </p>
+            </div>
+
+            <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
+              <p className="text-4xl">Can Submit Story Part</p>
+              <p className="kanit-light">{canSubmitStoryPart?.toString()}</p>
+            </div>
+            <RoundData round={roundData} />
+
+            <StoryPartListCard storyParts={roundSubmissions} cardName={"Round"} />
+            <StoryPartListCard storyParts={lastSubmissions} cardName={"Last"} />
+            <StoryPartListCard storyParts={publishedStoryParts} cardName={"Published"} />
+            <SubmissionStoryIdListCard storyParts={roundSubmissionStoryIds} cardName={"Round"} />
+            <SubmissionStoryIdListCard storyParts={lastSubmissionStoryIds} cardName={"Last"} />
+            <SubmissionStoryIdListCard storyParts={publishedStoryPartIds} cardName={"Published"} />
+
+            <SubmitStoryForm
+              writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync}
+              refetchAll={refetchAll}
+              gltrMinimum={glitterMinimum}
+            />
+            <SetGltrMinimumForm
+              writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync}
+              refetchAll={refetchAll}
+              gltrMinimum={glitterMinimum}
+            />
+            <StoryPartVoteForm
+              writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync}
+              refetchAll={refetchAll}
+            />
+
+            <button className="btn btn-primary" onClick={onClick}>
+              Update Round
+            </button>
           </div>
-          <RoundData round={roundData} />
-
-          <StoryPartListCard storyParts={roundSubmissions} cardName={"Round"} />
-          <StoryPartListCard storyParts={lastSubmissions} cardName={"Last"} />
-          <StoryPartListCard storyParts={publishedStoryParts} cardName={"Published"} />
-          <SubmissionStoryIdListCard storyParts={roundSubmissionStoryIds} cardName={"Round"} />
-          <SubmissionStoryIdListCard storyParts={lastSubmissionStoryIds} cardName={"Last"} />
-          <SubmissionStoryIdListCard storyParts={publishedStoryPartIds} cardName={"Published"} />
-
-          <SubmitStoryForm
-            writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync}
-            refetchAll={refetchAll}
-            gltrMinimum={glitterMinimum}
-          />
-          <SetGltrMinimumForm
-            writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync}
-            refetchAll={refetchAll}
-            gltrMinimum={glitterMinimum}
-          />
-          <StoryPartVoteForm writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync} refetchAll={refetchAll} />
-
-          <button className="btn btn-primary" onClick={onClick}>
-            Update Round
-          </button>
         </div>
       </div>
     </>
