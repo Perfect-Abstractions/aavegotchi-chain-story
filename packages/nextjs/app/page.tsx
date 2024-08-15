@@ -1,96 +1,12 @@
 "use client";
 
 import type { NextPage } from "next";
-import { formatEther } from "viem";
 import { NewsletterForm } from "~~/components/aavegotchi-chain-story/NewsletterForm";
-import { RoundData } from "~~/components/aavegotchi-chain-story/RoundData";
-import { SetGltrMinimumForm } from "~~/components/aavegotchi-chain-story/SetGltrMinimumForm";
-import { StoryPartListCard } from "~~/components/aavegotchi-chain-story/StoryPartListCard";
-import { StoryPartVoteForm } from "~~/components/aavegotchi-chain-story/StoryPartVoteForm";
-import { SubmissionStoryIdListCard } from "~~/components/aavegotchi-chain-story/SubmissionStoryIdListCard";
-import { SubmitStoryForm } from "~~/components/aavegotchi-chain-story/SubmitStoryForm";
-import { Address } from "~~/components/scaffold-eth";
-import { useScaffoldContract, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
-  const { data: AavegotchiChainStory } = useScaffoldContract({ contractName: "AavegotchiChainStory" });
-
-  const { writeContractAsync: writeAavegotchiChainStoryAsync } = useScaffoldWriteContract("AavegotchiChainStory");
-
-  const { data: glitterMinimum, refetch: refetchGetGlitterMinimum } = useScaffoldReadContract({
-    contractName: "AavegotchiChainStory",
-    functionName: "getGltrMinimum",
-  });
-
-  const { data: roundData, refetch: refetchRoundData } = useScaffoldReadContract({
-    contractName: "AavegotchiChainStory",
-    functionName: "getRoundData",
-  });
-
-  const { data: roundSubmissions, refetch: refetchRoundSubmissions } = useScaffoldReadContract({
-    contractName: "AavegotchiChainStory",
-    functionName: "getRoundSubmissions",
-    args: [BigInt(0)],
-  });
-
-  const { data: lastSubmissions, refetch: refetchLastSubmissions } = useScaffoldReadContract({
-    contractName: "AavegotchiChainStory",
-    functionName: "getLastSubmissions",
-  });
-
-  const { data: roundSubmissionStoryIds, refetch: refetchRoundSubmissionStoryIds } = useScaffoldReadContract({
-    contractName: "AavegotchiChainStory",
-    functionName: "getRoundSubmissionStoryIds",
-    args: [BigInt(0)],
-  });
-
-  const { data: lastSubmissionStoryIds, refetch: refetchLastSubmissionStoryIds } = useScaffoldReadContract({
-    contractName: "AavegotchiChainStory",
-    functionName: "getLastSubmissionStoryIds",
-  });
-
-  const { data: canSubmitStoryPart, refetch: refetchCanSubmitStoryPart } = useScaffoldReadContract({
-    contractName: "AavegotchiChainStory",
-    functionName: "canSubmitStoryPart",
-  });
-
-  const { data: publishedStoryParts, refetch: refetchPublishedStoryParts } = useScaffoldReadContract({
-    contractName: "AavegotchiChainStory",
-    functionName: "getPublishedStoryParts",
-  });
-
-  const { data: publishedStoryPartIds, refetch: refetchPublishedStoryPartIds } = useScaffoldReadContract({
-    contractName: "AavegotchiChainStory",
-    functionName: "getPublishedStoryPartIds",
-  });
-
-  async function refetchAll() {
-    await refetchGetGlitterMinimum();
-    await refetchRoundData();
-    await refetchRoundSubmissions();
-    await refetchLastSubmissions();
-    await refetchRoundSubmissionStoryIds();
-    await refetchLastSubmissionStoryIds();
-    await refetchCanSubmitStoryPart();
-    await refetchPublishedStoryParts();
-    await refetchPublishedStoryPartIds();
-  }
-
-  async function onClick() {
-    await writeAavegotchiChainStoryAsync({
-      functionName: "updateRound",
-    });
-
-    await refetchAll();
-  }
-
-  function numberWithCommas(x: any) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-
   return (
     <>
-      <div className="flex items-center flex-col flex-grow pt-10">
+      <div className="flex items-center flex-col flex-grow pt-10 bg-gradient-to-t from-base-100 to-base-200">
         <div className="flex items-center flex-col w-full">
           <p className="text-center text-3xl lg:text-9xl aavegotchi">Avegotchi chain story</p>
 
@@ -101,52 +17,33 @@ const Home: NextPage = () => {
             <p className="kanit text-4xl text-center">{"It is a chain story contract."}</p>
           </div>
 
+          <div className="flex flex-wrap justify-center lg:space-x-10">
+            <div className="lg:w-1/4 bg-base-300 rounded-lg shadow-md m-4 p-4">
+              <p className="text-3xl kanit text-center">What?</p>
+              <p className="text-xl kanit-light text-center">
+                {`A chain story is an organically grown story created by an increasing group of people using a smart contract.`}
+              </p>
+            </div>
+
+            <div className="lg:w-1/4 bg-base-300 rounded-lg shadow-md m-4 p-4">
+              <p className="text-3xl kanit text-center">How?</p>
+              <p className="text-xl kanit-light text-center">
+                {`New authors submit their version of the next part of the story. Past authors of the story judge and vote on the story submissions of the new authors.`}
+              </p>
+            </div>
+
+            <div className="lg:w-1/4 bg-base-300 rounded-lg shadow-md m-4 p-4">
+              <p className="text-3xl kanit text-center">Why?</p>
+              <p className="text-xl kanit-light text-center">
+                {`The idea is to create a continuing story by new authors using a smart contract. It is a story guided by its past authors and written by its new authors. The rules and how it works are enforced by a smart contract.`}
+              </p>
+            </div>
+          </div>
+
           <div className="flex items-center flex-col space-y-10">
             <div className="m-10">
               <NewsletterForm />
             </div>
-            <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
-              <p className="text-4xl kanit">Contract Address</p>
-              <Address address={AavegotchiChainStory?.address} />
-            </div>
-            <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
-              <p className="text-4xl kanit">Gltr Minimum</p>
-              <p className="kanit-light">
-                {numberWithCommas(formatEther(glitterMinimum || BigInt(0))).toString() || "N/A"}
-              </p>
-            </div>
-
-            <div className="flex flex-col bg-secondary rounded-lg border-4 border-accent shadow-2xl p-1">
-              <p className="text-4xl">Can Submit Story Part</p>
-              <p className="kanit-light">{canSubmitStoryPart?.toString()}</p>
-            </div>
-            <RoundData round={roundData} />
-
-            <StoryPartListCard storyParts={roundSubmissions} cardName={"Round"} />
-            <StoryPartListCard storyParts={lastSubmissions} cardName={"Last"} />
-            <StoryPartListCard storyParts={publishedStoryParts} cardName={"Published"} />
-            <SubmissionStoryIdListCard storyParts={roundSubmissionStoryIds} cardName={"Round"} />
-            <SubmissionStoryIdListCard storyParts={lastSubmissionStoryIds} cardName={"Last"} />
-            <SubmissionStoryIdListCard storyParts={publishedStoryPartIds} cardName={"Published"} />
-
-            <SubmitStoryForm
-              writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync}
-              refetchAll={refetchAll}
-              gltrMinimum={glitterMinimum}
-            />
-            <SetGltrMinimumForm
-              writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync}
-              refetchAll={refetchAll}
-              gltrMinimum={glitterMinimum}
-            />
-            <StoryPartVoteForm
-              writeAavegotchiChainStoryAsync={writeAavegotchiChainStoryAsync}
-              refetchAll={refetchAll}
-            />
-
-            <button className="btn btn-primary" onClick={onClick}>
-              Update Round
-            </button>
           </div>
         </div>
       </div>
