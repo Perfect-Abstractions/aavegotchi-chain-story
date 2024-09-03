@@ -10,9 +10,8 @@ import "hardhat/console.sol";
 // import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
- * A smart contract that allows changing a state variable of the contract and tracking the changes
- * It also allows the owner to withdraw the Ether in the contract
- * @author BuidlGuidl
+ * A smart contract implementation for the Aavegotchi Chain Story
+ * @author Nick Mudge
  */
 contract AavegotchiChainStory {
 
@@ -124,6 +123,7 @@ contract AavegotchiChainStory {
         author.publishedStoryPartId = storyPartId;
         author.storyPartIds.push(storyPartId);
         s.winningSubmissionStoryPartId = type(uint24).max;
+        GLTR_ERC20_TOKEN.transferFrom(msg.sender, address(this), _gltrAmount);
 
         emit StoryPartPublished(0, storyPartId, msg.sender);
     }
@@ -142,7 +142,7 @@ contract AavegotchiChainStory {
     }
 
     function canSubmitStoryPartAfterFourteenDays() internal view returns(bool can_) {
-        return block.timestamp > s.submissionStartTime + 14;
+        return block.timestamp > s.submissionStartTime + 14 days;
     }
 
     function internalCanSubmitStoryPart() internal view returns(bool can_) {
@@ -176,12 +176,12 @@ contract AavegotchiChainStory {
             if(s.newSubmissionInRound) {
                 newRounds = (block.timestamp - (submissionStartTime_ + 14 days)) / 7 days;
                 round_ += newRounds;
-                submissionStartTime_ = block.timestamp + (submissionStartTime_ + 14 days) + (newRounds * 7 days);
+                submissionStartTime_ = (submissionStartTime_ + 14 days) + (newRounds * 7 days);
             }
             else {
                 newRounds = (block.timestamp - (submissionStartTime_ + 7 days)) / 7 days;
                 round_ += newRounds;
-                submissionStartTime_ = block.timestamp + (submissionStartTime_ + 7 days) + (newRounds * 7 days);
+                submissionStartTime_ = (submissionStartTime_ + 7 days) + (newRounds * 7 days);
             }
             round_++;
         }
@@ -201,7 +201,7 @@ contract AavegotchiChainStory {
         (round_, submissionStartTime_) = getRoundSubmissionData();        
         submissionEndTime_ = submissionStartTime_ + 7 days;
         if(s.newSubmissionInRound) {
-            voteStartTime_ + submissionEndTime_;
+            voteStartTime_ = submissionEndTime_;
             voteEndTime_ = voteStartTime_ + 7 days;
         }
     }  
@@ -330,6 +330,7 @@ contract AavegotchiChainStory {
         }
         emit SubmissionVote(msg.sender, round, _storyPartId);
         uint256 numPublishedAuthors = s.publishedStoryParts.length;
+        author.roundsVoted[round] = true;
         totalAuthorsVoted++;
         s.totalAuthorsVoted = uint16(totalAuthorsVoted);
         if(numPublishedAuthors == totalAuthorsVoted) {            
@@ -408,7 +409,7 @@ contract AavegotchiChainStory {
         if(canSubmitStoryPartAfterFourteenDays() && _round == s.round && s.newSubmissionInRound) {
             winningStoryPartId = s.winningSubmissionStoryPartId;
             StoryPart storage winningStoryPart = s.storyParts[winningStoryPartId];
-             // If there were no voes this is false
+             // If there were no votes this is false
             if(winningStoryPart.voteScore > s.noSubmissionVoteScore) { 
                 reportWinningStoryPart = true;
             }
@@ -500,6 +501,7 @@ contract AavegotchiChainStory {
         }
         s.gltrMinimum = uint104(_newGltrMinimum);
     }
+
     function getGltrMinimum() external view returns(uint256) {
         return s.gltrMinimum;
     }
